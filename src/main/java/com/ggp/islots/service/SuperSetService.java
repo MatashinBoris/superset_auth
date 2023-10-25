@@ -40,11 +40,11 @@ public class SuperSetService {
     public GuestTokenResponse fetchGuestToken(SuperSetAuthRequest request) {
 
         LoginResponse loginResponse = adminAuth();
-        String url = "http://localhost:8080/api/v1/security/guest_token";
+        String url = "http://localhost:8080/api/v1/security/guest_token/";
         String clientCode = request.getClientCode() == null ? "demo" : request.getClientCode();
 
         GuestTokenRequest guestTokenRequest = GuestTokenRequest.builder()
-                .user(new GuestTokenRequest.User("admin", "boris", "boris"))
+                .user(new GuestTokenRequest.User("boris", "boris", "boris"))
                 .resources(List.of(new GuestTokenRequest.Resource("dashboard", request.getDashboardId())))
                 .rls(List.of(new GuestTokenRequest.RLS("client_code='" + clientCode + "'")))
                 .build();
@@ -55,7 +55,6 @@ public class SuperSetService {
         HttpEntity<GuestTokenRequest> requestEntity = new HttpEntity<>(guestTokenRequest, headers);
 
         ResponseEntity<GuestTokenResponse> responseEntity = restTemplate.postForEntity(url, requestEntity, GuestTokenResponse.class);
-
         return responseEntity.getBody();
     }
 
